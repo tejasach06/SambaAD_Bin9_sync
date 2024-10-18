@@ -1,0 +1,2 @@
+internal.example.com
+internal.example2.com
