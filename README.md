@@ -1,4 +1,4 @@
-# DNS Zone Generator
+# SambaAD DNS to Bind9
 
 ## Overview
 
