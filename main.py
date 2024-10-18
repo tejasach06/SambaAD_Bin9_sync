@@ -3,6 +3,18 @@ import json
 from collections import defaultdict
 import os
 from typing import Dict, List, Any
+import subprocess
+import sys
+
+# Zone Info Dumper Script execution
+process = subprocess.Popen(["/bin/bash", "dns_dumper.sh"])
+# Wait for the process to complete and store the return code
+return_code = process.wait()
+# Check if the script executed successfully
+if return_code == 0:
+    print("DNS Zone Query Successful")
+else:
+    sys.exit("DNS Zone Query Failed")
 
 # Constants for DNS configuration
 ZONE_FILE = "zone.txt"
