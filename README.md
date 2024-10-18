@@ -1,4 +1,4 @@
-# SambaAD DNS to Bind9
+# SambaAd to Bind9
 
 ## Overview
 
@@ -16,19 +16,34 @@ This Python script generates BIND9 compatible zone files and configurations from
 
 - Python 3.6+
 - No external libraries required (uses only Python standard library)
+- Samba-tool (for generating the initial zone list)
 
 ## Usage
 
-1. Prepare your input files:
-   - Create a `zone.txt` file listing all the domains you want to generate zone files for, one per line.
+1. Generate the `zone.txt` file:
+   Use the following bash command to generate a list of forward zones:
+
+   ```shell
+   samba-tool dns zonelist localhost --forward -U<domain\userid> -P<"password"> | grep "pszZoneName" | sed 's/pszZoneName                 : //g' > zone.txt
+   ```
+
+   Replace `<domain\userid>` with your domain and user ID, and `<"password">` with your password.
+
+   This command does the following:
+   - Uses `samba-tool` to list all forward DNS zones
+   - Filters the output to only include lines with "pszZoneName"
+   - Removes the "pszZoneName : " prefix from each line
+   - Saves the result to `zone.txt`
+
+2. Prepare your input files:
    - For each domain listed in `zone.txt`, create a corresponding file in the `zone_query/` directory (e.g., `zone_query/example.com.txt`) containing the DNS records for that domain.
 
-2. Run the script:
+3. Run the script:
    ```
    python dns_zone_generator.py
    ```
 
-3. The script will generate the following outputs:
+4. The script will generate the following outputs:
    - Forward zone files in the `forward_zone/` directory
    - Reverse zone files in the `reverse_zone/` directory
    - JSON representations of parsed data in the `json/` directory
@@ -82,6 +97,10 @@ The script generates the following types of files:
 - `generate_bind9_config()`: Generates the main BIND9 configuration file
 - `main()`: Orchestrates the entire zone generation process
 
+## Contributing
 
+Contributions to improve the script are welcome. Please submit a pull request or open an issue to discuss proposed changes.
 
+## License
 
+This project is open source and available under the [MIT License](LICENSE).
